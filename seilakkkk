@@ -1,0 +1,802 @@
+-- Programa: CHEAT EXCLUSIVO KIEFER 4
+-- Cor: Verde
+-- Efeito: Neon
+-- made by KIEFER & LIPZ
+-- ARSENAL TEAM CHECK: sempre mira só em inimigos.
+
+local Players = game:GetService('Players')
+local Teams = game:GetService('Teams')
+local UIS = game:GetService('UserInputService')
+local RunService = game:GetService('RunService')
+local TweenService = game:GetService('TweenService')
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
+
+local screenGui = Instance.new('ScreenGui')
+screenGui.Name = 'CHEAT EXCLUSIVO KIEFER 4_GUI'
+screenGui.ResetOnSpawn = false
+screenGui.IgnoreGuiInset = true
+screenGui.Parent = LocalPlayer:WaitForChild('PlayerGui')
+
+local isMinimized = false
+local minimizeHotkey = Enum.KeyCode.K
+
+local mainFrame = Instance.new('Frame')
+mainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+mainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+mainFrame.Size = UDim2.new(0, 380, 0, 340)
+mainFrame.BackgroundColor3 = Color3.fromRGB(18, 18, 24)
+mainFrame.BorderSizePixel = 0
+mainFrame.Active = true
+mainFrame.Draggable = true
+mainFrame.ClipsDescendants = true
+mainFrame.ZIndex = 2
+mainFrame.Parent = screenGui
+
+local mainCorner = Instance.new('UICorner')
+mainCorner.CornerRadius = UDim.new(0, 10)
+mainCorner.Parent = mainFrame
+
+local shadow = Instance.new('ImageLabel')
+shadow.AnchorPoint = Vector2.new(0.5, 0.5)
+shadow.Position = UDim2.new(0.5, 0, 0.5, 4)
+shadow.Size = UDim2.new(1, 26, 1, 26)
+shadow.BackgroundTransparency = 1
+shadow.Image = 'rbxassetid://5554236805'
+shadow.ImageColor3 = Color3.fromRGB(0, 0, 0)
+shadow.ImageTransparency = 0.35
+shadow.ScaleType = Enum.ScaleType.Slice
+shadow.SliceCenter = Rect.new(23, 23, 277, 277)
+shadow.ZIndex = 1
+shadow.Parent = mainFrame
+
+local corPrincipal = Color3.fromRGB(80, 200, 120)
+
+local topBar = Instance.new('Frame')
+topBar.Size = UDim2.new(1, 0, 0, 42)
+topBar.Position = UDim2.new(0, 0, 0, 0)
+topBar.BackgroundColor3 = corPrincipal
+topBar.BorderSizePixel = 0
+topBar.ZIndex = 3
+topBar.Parent = mainFrame
+
+local topGrad = Instance.new('UIGradient')
+topGrad.Color = ColorSequence.new({
+    ColorSequenceKeypoint.new(0, corPrincipal),
+    ColorSequenceKeypoint.new(1, Color3.fromRGB(40, 40, 70))
+})
+topGrad.Rotation = 15
+topGrad.Parent = topBar
+
+local topCorner = Instance.new('UICorner')
+topCorner.CornerRadius = UDim.new(0, 10)
+topCorner.Parent = topBar
+
+local title = Instance.new('TextLabel')
+title.BackgroundTransparency = 1
+title.Position = UDim2.new(0, 10, 0, 4)
+title.Size = UDim2.new(1, -100, 0, 20)
+title.Font = Enum.Font.GothamBold
+title.Text = 'LKz Exclusive'
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextSize = 18
+title.TextXAlignment = Enum.TextXAlignment.Left
+title.ZIndex = 4
+title.Parent = topBar
+
+local madeBy = Instance.new('TextLabel')
+madeBy.BackgroundTransparency = 1
+madeBy.Position = UDim2.new(0, 10, 0, 22)
+madeBy.Size = UDim2.new(1, -100, 0, 16)
+madeBy.Font = Enum.Font.Gotham
+madeBy.Text = 'made by KIEFER & LIPZ'
+madeBy.TextColor3 = Color3.fromRGB(220, 220, 220)
+madeBy.TextSize = 13
+madeBy.TextXAlignment = Enum.TextXAlignment.Left
+madeBy.ZIndex = 4
+madeBy.Parent = topBar
+
+local minimizeBtn = Instance.new('TextButton')
+minimizeBtn.AnchorPoint = Vector2.new(1, 0.5)
+minimizeBtn.Position = UDim2.new(1, -50, 0.5, 0)
+minimizeBtn.Size = UDim2.new(0, 26, 0, 26)
+minimizeBtn.BackgroundColor3 = Color3.fromRGB(50, 100, 200)
+minimizeBtn.Text = '−'
+minimizeBtn.Font = Enum.Font.GothamBold
+minimizeBtn.TextSize = 18
+minimizeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+minimizeBtn.AutoButtonColor = false
+minimizeBtn.ZIndex = 4
+minimizeBtn.Parent = topBar
+
+local minimizeCorner = Instance.new('UICorner')
+minimizeCorner.CornerRadius = UDim.new(1, 0)
+minimizeCorner.Parent = minimizeBtn
+
+local closeBtn = Instance.new('TextButton')
+closeBtn.AnchorPoint = Vector2.new(1, 0.5)
+closeBtn.Position = UDim2.new(1, -10, 0.5, 0)
+closeBtn.Size = UDim2.new(0, 26, 0, 26)
+closeBtn.BackgroundColor3 = Color3.fromRGB(220, 60, 60)
+closeBtn.Text = 'X'
+closeBtn.Font = Enum.Font.GothamBold
+closeBtn.TextSize = 14
+closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeBtn.AutoButtonColor = false
+closeBtn.ZIndex = 4
+closeBtn.Parent = topBar
+
+local closeCorner = Instance.new('UICorner')
+closeCorner.CornerRadius = UDim.new(1, 0)
+closeCorner.Parent = closeBtn
+
+minimizeBtn.MouseButton1Click:Connect(function()
+    isMinimized = not isMinimized
+    if isMinimized then
+        mainFrame.Size = UDim2.new(0, 380, 0, 42)
+        minimizeBtn.Text = '□'
+    else
+        mainFrame.Size = UDim2.new(0, 380, 0, 340)
+        minimizeBtn.Text = '−'
+    end
+end)
+
+closeBtn.MouseButton1Click:Connect(function()
+    screenGui:Destroy()
+end)
+
+UIS.InputBegan:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode == minimizeHotkey then
+        isMinimized = not isMinimized
+        if isMinimized then
+            mainFrame.Size = UDim2.new(0, 380, 0, 42)
+            minimizeBtn.Text = '□'
+        else
+            mainFrame.Size = UDim2.new(0, 380, 0, 340)
+            minimizeBtn.Text = '−'
+        end
+    end
+end)
+
+local neon = Instance.new('UIStroke')
+neon.Color = corPrincipal
+neon.Thickness = 3
+neon.Transparency = 0.1
+neon.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+neon.Parent = mainFrame
+
+local sideTabs = Instance.new('Frame')
+sideTabs.Position = UDim2.new(0, 0, 0, 42)
+sideTabs.Size = UDim2.new(0, 90, 1, -42)
+sideTabs.BackgroundColor3 = Color3.fromRGB(15, 15, 22)
+sideTabs.BorderSizePixel = 0
+sideTabs.ZIndex = 2
+sideTabs.Parent = mainFrame
+
+local sideCorner = Instance.new('UICorner')
+sideCorner.CornerRadius = UDim.new(0, 10)
+sideCorner.Parent = sideTabs
+
+local sideList = Instance.new('UIListLayout')
+sideList.FillDirection = Enum.FillDirection.Vertical
+sideList.HorizontalAlignment = Enum.HorizontalAlignment.Center
+sideList.VerticalAlignment = Enum.VerticalAlignment.Top
+sideList.Padding = UDim.new(0, 6)
+sideList.Parent = sideTabs
+
+local sidePad = Instance.new('UIPadding')
+sidePad.PaddingTop = UDim.new(0, 8)
+sidePad.Parent = sideTabs
+
+local contentHolder = Instance.new('Frame')
+contentHolder.Position = UDim2.new(0, 95, 0, 46)
+contentHolder.Size = UDim2.new(1, -105, 1, -56)
+contentHolder.BackgroundColor3 = Color3.fromRGB(14, 14, 20)
+contentHolder.BorderSizePixel = 0
+contentHolder.ZIndex = 2
+contentHolder.Parent = mainFrame
+
+local contentCorner = Instance.new('UICorner')
+contentCorner.CornerRadius = UDim.new(0, 10)
+contentCorner.Parent = contentHolder
+
+local function createScrollPage(name)
+    local sf = Instance.new('ScrollingFrame')
+    sf.Name = name
+    sf.Size = UDim2.new(1, -10, 1, -10)
+    sf.Position = UDim2.new(0, 5, 0, 5)
+    sf.BackgroundTransparency = 1
+    sf.BorderSizePixel = 0
+    sf.ScrollBarThickness = 3
+    sf.ScrollBarImageColor3 = corPrincipal
+    sf.CanvasSize = UDim2.new(0, 0, 0, 0)
+    sf.AutomaticCanvasSize = Enum.AutomaticSize.Y
+    sf.Visible = false
+    sf.ZIndex = 3
+    sf.Parent = contentHolder
+    local layout = Instance.new('UIListLayout')
+    layout.FillDirection = Enum.FillDirection.Vertical
+    layout.Padding = UDim.new(0, 6)
+    layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    layout.SortOrder = Enum.SortOrder.LayoutOrder
+    layout.Parent = sf
+    local pad = Instance.new('UIPadding')
+    pad.PaddingTop = UDim.new(0, 6)
+    pad.PaddingBottom = UDim.new(0, 6)
+    pad.Parent = sf
+    return sf
+end
+
+local pageCombat = createScrollPage('Combat')
+local pageVisual = createScrollPage('Visual')
+local pageMisc = createScrollPage('Misc')
+local pageClickRage = createScrollPage('ClickRage')
+pageCombat.Visible = true
+local currentPage = pageCombat
+
+local function createTab(text, page)
+    local tab = Instance.new('TextButton')
+    tab.Size = UDim2.new(1, -12, 0, 30)
+    tab.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+    tab.TextColor3 = Color3.fromRGB(230, 230, 230)
+    tab.Font = Enum.Font.GothamSemibold
+    tab.TextSize = 14
+    tab.Text = text
+    tab.AutoButtonColor = false
+    tab.ZIndex = 3
+    tab.Parent = sideTabs
+    local c = Instance.new('UICorner')
+    c.CornerRadius = UDim.new(0, 8)
+    c.Parent = tab
+    local stroke = Instance.new('UIStroke')
+    stroke.Color = corPrincipal
+    stroke.Thickness = 1.2
+    stroke.Transparency = 0.6
+    stroke.Parent = tab
+    local function setActive(state)
+        if state then
+            tab.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
+            tab.TextColor3 = Color3.fromRGB(255, 255, 255)
+        else
+            tab.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+            tab.TextColor3 = Color3.fromRGB(200, 200, 200)
+        end
+    end
+    setActive(page == currentPage)
+    tab.MouseButton1Click:Connect(function()
+        currentPage.Visible = false
+        currentPage = page
+        currentPage.Visible = true
+        for _, child in ipairs(sideTabs:GetChildren()) do
+            if child:IsA('TextButton') then
+                child.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
+                child.TextColor3 = Color3.fromRGB(200, 200, 200)
+            end
+        end
+        setActive(true)
+    end)
+    return tab
+end
+
+local tabCombat = createTab('COMBAT', pageCombat)
+local tabVisual = createTab('VISUAL', pageVisual)
+local tabMisc = createTab('MISC', pageMisc)
+local tabClickRage = createTab('CLICK RAGE', pageClickRage)
+
+local function createModernButton(parentPage, text, order)
+    local btn = Instance.new('TextButton')
+    btn.Size = UDim2.new(0.96, 0, 0, 34)
+    btn.BackgroundColor3 = Color3.fromRGB(32, 32, 45)
+    btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    btn.Font = Enum.Font.GothamSemibold
+    btn.TextSize = 14
+    btn.Text = text
+    btn.AutoButtonColor = false
+    btn.LayoutOrder = order or 0
+    btn.ZIndex = 4
+    btn.Parent = parentPage
+    local corner = Instance.new('UICorner')
+    corner.CornerRadius = UDim.new(0, 8)
+    corner.Parent = btn
+    local stroke = Instance.new('UIStroke')
+    stroke.Color = corPrincipal
+    stroke.Thickness = 1.2
+    stroke.Transparency = 0.5
+    stroke.Parent = btn
+    local hoverTween = TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Quart), {BackgroundColor3 = Color3.fromRGB(45, 45, 65)})
+    local normalTween = TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Quart), {BackgroundColor3 = Color3.fromRGB(32, 32, 45)})
+    btn.MouseEnter:Connect(function() hoverTween:Play() end)
+    btn.MouseLeave:Connect(function() normalTween:Play() end)
+    return btn
+end
+
+local function isEnemy(plr)
+    if not plr or plr == LocalPlayer then return false end
+    if not plr.Team or not LocalPlayer.Team then
+        return true
+    end
+    return plr.Team ~= LocalPlayer.Team
+end
+
+local AimbotActive = false
+local aimbotHotkey = Enum.KeyCode.X
+local AimbotSmooth = 0.12
+local AimbotFOV = 150
+local aimbotMode = 'legit'
+local AimAssistActive = false
+local aimAssistHotkey = Enum.KeyCode.T
+local AimAssistStrength = 0.04
+local AimAssistFOV = 180
+local ESPEnabled = false
+local espBoxes = {}
+local SuperJumpEnabled = false
+local defaultJump = 50
+local SpeedEnabled = false
+local defaultWalk = 16
+local WallHackEnabled = false
+local wallParts = {}
+local ClickRageEnabled = false
+local FlyEnabled = false
+local FlySpeed = 33
+local FlyBodyVel = nil
+local FlyBodyGyro = nil
+
+local function isVisible(targetHRP)
+    if not targetHRP then return false end
+    local cam = workspace.CurrentCamera
+    local origin = cam.CFrame.Position
+    local direction = (targetHRP.Position - origin)
+    local params = RaycastParams.new()
+    params.FilterType = Enum.RaycastFilterType.Blacklist
+    params.FilterDescendantsInstances = {LocalPlayer.Character}
+    params.IgnoreWater = true
+    local result = workspace:Raycast(origin, direction, params)
+    if result and result.Instance then
+        if not result.Instance:IsDescendantOf(targetHRP.Parent) then
+            return false
+        end
+    end
+    return true
+end
+
+local function getClosestEnemyWithFOV(fovRadius)
+    local closestDist = math.huge
+    local target = nil
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if isEnemy(plr) and plr.Character and plr.Character:FindFirstChild('HumanoidRootPart') then
+            local hrp = plr.Character.HumanoidRootPart
+            local pos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(hrp.Position)
+            if onScreen then
+                local mousePos = Vector2.new(Mouse.X, Mouse.Y)
+                local screenPos = Vector2.new(pos.X, pos.Y)
+                local dist = (mousePos - screenPos).Magnitude
+                if dist <= fovRadius and dist < closestDist then
+                    if isVisible(hrp) then
+                        closestDist = dist
+                        target = plr
+                    end
+                end
+            end
+        end
+    end
+    return target
+end
+
+local function getClosestEnemyForClickRage()
+    local biggestFOV = 1000
+    local closestDist = math.huge
+    local target = nil
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if isEnemy(plr) and plr.Character and plr.Character:FindFirstChild('Head') then
+            local headPos = plr.Character.Head.Position
+            local screenPos, onScreen = workspace.CurrentCamera:WorldToViewportPoint(headPos)
+            if onScreen then
+                local mousePos = Vector2.new(Mouse.X, Mouse.Y)
+                local screenPosition = Vector2.new(screenPos.X, screenPos.Y)
+                local dist = (mousePos - screenPosition).Magnitude
+                if dist < biggestFOV and dist < closestDist then
+                    if isVisible(plr.Character.HumanoidRootPart) then
+                        closestDist = dist
+                        target = plr
+                    end
+                end
+            end
+        end
+    end
+    return target
+end
+
+local aimbotBtn = createModernButton(pageCombat, '🎯 AIMBOT [X] - OFF', 1)
+local aimbotHotkeyFrame = Instance.new('Frame')
+aimbotHotkeyFrame.Size = UDim2.new(0, 120, 0, 35)
+aimbotHotkeyFrame.Position = UDim2.new(1, 5, 0, 0)
+aimbotHotkeyFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+aimbotHotkeyFrame.BorderSizePixel = 0
+aimbotHotkeyFrame.Visible = false
+aimbotHotkeyFrame.ZIndex = 10
+aimbotHotkeyFrame.Parent = aimbotBtn
+local hotkeyCorner = Instance.new('UICorner')
+hotkeyCorner.CornerRadius = UDim.new(0, 6)
+hotkeyCorner.Parent = aimbotHotkeyFrame
+local hotkeyLabel = Instance.new('TextLabel')
+hotkeyLabel.Size = UDim2.new(1, -10, 1, 0)
+hotkeyLabel.Position = UDim2.new(0, 5, 0, 0)
+hotkeyLabel.BackgroundTransparency = 1
+hotkeyLabel.Font = Enum.Font.Gotham
+hotkeyLabel.TextSize = 12
+hotkeyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+hotkeyLabel.TextXAlignment = Enum.TextXAlignment.Left
+hotkeyLabel.Text = 'Pressione uma tecla...'
+hotkeyLabel.ZIndex = 11
+hotkeyLabel.Parent = aimbotHotkeyFrame
+
+aimbotBtn.MouseButton2Click:Connect(function()
+    aimbotHotkeyFrame.Visible = not aimbotHotkeyFrame.Visible
+end)
+
+local waitingAimbotKey = false
+aimbotHotkeyFrame.MouseEnter:Connect(function() waitingAimbotKey = true end)
+aimbotHotkeyFrame.MouseLeave:Connect(function() waitingAimbotKey = false end)
+aimbotHotkeyFrame.InputBegan:Connect(function(input)
+    if waitingAimbotKey and input.UserInputType == Enum.UserInputType.Keyboard then
+        aimbotHotkey = input.KeyCode
+        hotkeyLabel.Text = 'Tecla: ' .. tostring(aimbotHotkey.Name)
+        aimbotHotkeyFrame.Visible = false
+        aimbotBtn.Text = '🎯 AIMBOT [' .. tostring(aimbotHotkey.Name) .. '] - OFF'
+    end
+end)
+
+UIS.InputBegan:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode == aimbotHotkey then
+        AimbotActive = true
+        aimbotBtn.Text = '🎯 AIMBOT [' .. tostring(aimbotHotkey.Name) .. '] - HOLD'
+    end
+end)
+
+UIS.InputEnded:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode == aimbotHotkey then
+        AimbotActive = false
+        aimbotBtn.Text = '🎯 AIMBOT [' .. tostring(aimbotHotkey.Name) .. '] - OFF'
+    end
+end)
+
+local rageBtn = createModernButton(pageCombat, '⚡ RAGE', 2)
+local semiRageBtn = createModernButton(pageCombat, '🔥 SEMI-RAGE', 3)
+local smoothBtn = createModernButton(pageCombat, '✨ SMOOTH', 4)
+local legitBtn = createModernButton(pageCombat, '✅ LEGIT', 5)
+
+local function updateModeButtons()
+    local normalColor = Color3.fromRGB(32, 32, 45)
+    local activeColor = Color3.fromRGB(70, 150, 70)
+    rageBtn.BackgroundColor3 = aimbotMode == 'rage' and activeColor or normalColor
+    semiRageBtn.BackgroundColor3 = aimbotMode == 'semi' and activeColor or normalColor
+    smoothBtn.BackgroundColor3 = aimbotMode == 'smooth' and activeColor or normalColor
+    legitBtn.BackgroundColor3 = aimbotMode == 'legit' and activeColor or normalColor
+end
+
+rageBtn.MouseButton1Click:Connect(function()
+    aimbotMode = 'rage'
+    AimbotSmooth = 0.95
+    AimbotFOV = 450
+    updateModeButtons()
+end)
+
+semiRageBtn.MouseButton1Click:Connect(function()
+    aimbotMode = 'semi'
+    AimbotSmooth = 0.5
+    AimbotFOV = 300
+    updateModeButtons()
+end)
+
+smoothBtn.MouseButton1Click:Connect(function()
+    aimbotMode = 'smooth'
+    AimbotSmooth = 0.2
+    AimbotFOV = 220
+    updateModeButtons()
+end)
+
+legitBtn.MouseButton1Click:Connect(function()
+    aimbotMode = 'legit'
+    AimbotSmooth = 0.12
+    AimbotFOV = 150
+    updateModeButtons()
+end)
+
+updateModeButtons()
+
+RunService.RenderStepped:Connect(function()
+    if AimbotActive then
+        local target = getClosestEnemyWithFOV(AimbotFOV)
+        if target and target.Character and target.Character:FindFirstChild('HumanoidRootPart') then
+            local cam = workspace.CurrentCamera
+            local from = cam.CFrame
+            local to = CFrame.new(cam.CFrame.Position, target.Character.HumanoidRootPart.Position)
+            cam.CFrame = from:Lerp(to, AimbotSmooth)
+        end
+    end
+end)
+
+local aimAssistBtn = createModernButton(pageCombat, '🎯 AIM ASSIST [T] - OFF', 6)
+local aimAssistHotkeyFrame = Instance.new('Frame')
+aimAssistHotkeyFrame.Size = UDim2.new(0, 120, 0, 35)
+aimAssistHotkeyFrame.Position = UDim2.new(1, 5, 0, 0)
+aimAssistHotkeyFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+aimAssistHotkeyFrame.BorderSizePixel = 0
+aimAssistHotkeyFrame.Visible = false
+aimAssistHotkeyFrame.ZIndex = 10
+aimAssistHotkeyFrame.Parent = aimAssistBtn
+local aimAssistHotkeyCorner = Instance.new('UICorner')
+aimAssistHotkeyCorner.CornerRadius = UDim.new(0, 6)
+aimAssistHotkeyCorner.Parent = aimAssistHotkeyFrame
+local aimAssistHotkeyLabel = Instance.new('TextLabel')
+aimAssistHotkeyLabel.Size = UDim2.new(1, -10, 1, 0)
+aimAssistHotkeyLabel.Position = UDim2.new(0, 5, 0, 0)
+aimAssistHotkeyLabel.BackgroundTransparency = 1
+aimAssistHotkeyLabel.Font = Enum.Font.Gotham
+aimAssistHotkeyLabel.TextSize = 12
+aimAssistHotkeyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+aimAssistHotkeyLabel.TextXAlignment = Enum.TextXAlignment.Left
+aimAssistHotkeyLabel.Text = 'Pressione uma tecla...'
+aimAssistHotkeyLabel.ZIndex = 11
+aimAssistHotkeyLabel.Parent = aimAssistHotkeyFrame
+
+aimAssistBtn.MouseButton2Click:Connect(function()
+    aimAssistHotkeyFrame.Visible = not aimAssistHotkeyFrame.Visible
+end)
+
+local waitingAimAssistKey = false
+aimAssistHotkeyFrame.MouseEnter:Connect(function() waitingAimAssistKey = true end)
+aimAssistHotkeyFrame.MouseLeave:Connect(function() waitingAimAssistKey = false end)
+aimAssistHotkeyFrame.InputBegan:Connect(function(input)
+    if waitingAimAssistKey and input.UserInputType == Enum.UserInputType.Keyboard then
+        aimAssistHotkey = input.KeyCode
+        aimAssistHotkeyLabel.Text = 'Tecla: ' .. tostring(aimAssistHotkey.Name)
+        aimAssistHotkeyFrame.Visible = false
+        aimAssistBtn.Text = '🎯 AIM ASSIST [' .. tostring(aimAssistHotkey.Name) .. '] - OFF'
+    end
+end)
+
+UIS.InputBegan:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode == aimAssistHotkey then
+        AimAssistActive = true
+        aimAssistBtn.Text = '🎯 AIM ASSIST [' .. tostring(aimAssistHotkey.Name) .. '] - HOLD'
+    end
+end)
+
+UIS.InputEnded:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode == aimAssistHotkey then
+        AimAssistActive = false
+        aimAssistBtn.Text = '🎯 AIM ASSIST [' .. tostring(aimAssistHotkey.Name) .. '] - OFF'
+    end
+end)
+
+RunService.RenderStepped:Connect(function()
+    if AimAssistActive then
+        local target = getClosestEnemyWithFOV(AimAssistFOV)
+        if target and target.Character and target.Character:FindFirstChild('HumanoidRootPart') then
+            local cam = workspace.CurrentCamera
+            local from = cam.CFrame
+            local to = CFrame.new(cam.CFrame.Position, target.Character.HumanoidRootPart.Position)
+            cam.CFrame = from:Lerp(to, AimAssistStrength)
+        end
+    end
+end)
+
+local function clearESP()
+    for _, b in ipairs(espBoxes) do
+        if b and b.Parent then b:Destroy() end
+    end
+    espBoxes = {}
+end
+
+local function createESPForPlayer(plr)
+    if plr.Character and plr.Character:FindFirstChild('HumanoidRootPart') and isEnemy(plr) then
+        local box = Instance.new('BoxHandleAdornment')
+        box.Size = Vector3.new(4, 6, 2)
+        box.Color3 = Color3.new(1, 0, 0)
+        box.Transparency = 0.5
+        box.ZIndex = 10
+        box.AlwaysOnTop = true
+        box.Adornee = plr.Character.HumanoidRootPart
+        box.Parent = workspace
+        table.insert(espBoxes, box)
+    end
+end
+
+local espBtn = createModernButton(pageVisual, '👁️ ESP ENEMIES - OFF', 1)
+espBtn.MouseButton1Click:Connect(function()
+    ESPEnabled = not ESPEnabled
+    espBtn.Text = '👁️ ESP ENEMIES - ' .. (ESPEnabled and 'ON' or 'OFF')
+    clearESP()
+    if ESPEnabled then
+        for _, plr in ipairs(Players:GetPlayers()) do
+            if isEnemy(plr) then
+                createESPForPlayer(plr)
+            end
+        end
+    end
+end)
+
+Players.PlayerAdded:Connect(function(plr)
+    if ESPEnabled and isEnemy(plr) then
+        createESPForPlayer(plr)
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(plr)
+    if ESPEnabled then
+        clearESP()
+        for _, other in ipairs(Players:GetPlayers()) do
+            if isEnemy(other) then
+                createESPForPlayer(other)
+            end
+        end
+    end
+end)
+
+local wallBtn = createModernButton(pageVisual, '🧱 WALL HACK - OFF', 2)
+wallBtn.MouseButton1Click:Connect(function()
+    WallHackEnabled = not WallHackEnabled
+    wallBtn.Text = '🧱 WALL HACK - ' .. (WallHackEnabled and 'ON' or 'OFF')
+    for _, p in ipairs(wallParts) do
+        if p.part and p.part.Parent then
+            p.part.LocalTransparencyModifier = p.old or 0
+        end
+    end
+    wallParts = {}
+    if WallHackEnabled then
+        for _, part in ipairs(workspace:GetDescendants()) do
+            if part:IsA('BasePart') and part.Transparency < 1 then
+                table.insert(wallParts, {part = part, old = part.LocalTransparencyModifier})
+                part.LocalTransparencyModifier = 0.7
+            end
+        end
+    end
+end)
+
+local nightModeBtn = createModernButton(pageVisual, '🌙 NIGHT MODE - OFF', 3)
+local originalClockTime = 14
+
+nightModeBtn.MouseButton1Click:Connect(function()
+    local lighting = game:GetService('Lighting')
+    if lighting.ClockTime == 0 then
+        lighting.ClockTime = originalClockTime
+        nightModeBtn.Text = '🌙 NIGHT MODE - OFF'
+    else
+        originalClockTime = lighting.ClockTime
+        lighting.ClockTime = 0
+        nightModeBtn.Text = '🌙 NIGHT MODE - ON'
+    end
+end)
+
+local worldRgbBtn = createModernButton(pageVisual, '🌍 WORLD RGB - OFF', 4)
+local worldRgbActive = false
+local worldRgbHue = 0
+
+worldRgbBtn.MouseButton1Click:Connect(function()
+    worldRgbActive = not worldRgbActive
+    worldRgbBtn.Text = '🌍 WORLD RGB - ' .. (worldRgbActive and 'ON' or 'OFF')
+    if not worldRgbActive then
+        local terrain = workspace.Terrain
+        terrain.WaterColor = Color3.fromRGB(0, 85, 127)
+        terrain.WaterTransparency = 0
+        terrain.WaterReflectance = 0
+    end
+end)
+
+RunService.RenderStepped:Connect(function()
+    if worldRgbActive then
+        worldRgbHue = (worldRgbHue + 0.01) % 1
+        local lighting = game:GetService('Lighting')
+        lighting.Ambient = Color3.fromHSV(worldRgbHue, 0.7, 0.9)
+        lighting.OutdoorAmbient = Color3.fromHSV(worldRgbHue, 0.6, 0.8)
+        local terrain = workspace.Terrain
+        terrain.WaterColor = Color3.fromHSV(worldRgbHue, 0.8, 0.7)
+    end
+end)
+
+local superJumpBtn = createModernButton(pageMisc, '🚀 SUPER JUMP - OFF', 1)
+superJumpBtn.MouseButton1Click:Connect(function()
+    SuperJumpEnabled = not SuperJumpEnabled
+    superJumpBtn.Text = '🚀 SUPER JUMP - ' .. (SuperJumpEnabled and 'ON' or 'OFF')
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local hum = char:WaitForChild('Humanoid')
+    if SuperJumpEnabled then
+        defaultJump = hum.JumpPower
+        hum.JumpPower = 150
+    else
+        hum.JumpPower = defaultJump
+    end
+end)
+
+local speedBtn = createModernButton(pageMisc, '⚡ SPEED - OFF', 2)
+speedBtn.MouseButton1Click:Connect(function()
+    SpeedEnabled = not SpeedEnabled
+    speedBtn.Text = '⚡ SPEED - ' .. (SpeedEnabled and 'ON' or 'OFF')
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local hum = char:WaitForChild('Humanoid')
+    if SpeedEnabled then
+        defaultWalk = hum.WalkSpeed
+        hum.WalkSpeed = 50
+    else
+        hum.WalkSpeed = defaultWalk
+    end
+end)
+
+local flyBtn = createModernButton(pageMisc, '✈️ FLY - OFF', 3)
+flyBtn.MouseButton1Click:Connect(function()
+    FlyEnabled = not FlyEnabled
+    flyBtn.Text = '✈️ FLY - ' .. (FlyEnabled and 'ON' or 'OFF')
+    local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+    local hum = char:WaitForChild('Humanoid')
+    local root = char:WaitForChild('HumanoidRootPart')
+    if FlyEnabled then
+        hum.PlatformStand = true
+        FlyBodyVel = Instance.new('BodyVelocity')
+        FlyBodyVel.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+        FlyBodyVel.Velocity = Vector3.new(0, 0, 0)
+        FlyBodyVel.Parent = root
+        FlyBodyGyro = Instance.new('BodyGyro')
+        FlyBodyGyro.MaxTorque = Vector3.new(1e5, 1e5, 1e5)
+        FlyBodyGyro.P = 1e4
+        FlyBodyGyro.CFrame = workspace.CurrentCamera.CFrame
+        FlyBodyGyro.Parent = root
+    else
+        hum.PlatformStand = false
+        if FlyBodyVel then FlyBodyVel:Destroy() FlyBodyVel = nil end
+        if FlyBodyGyro then FlyBodyGyro:Destroy() FlyBodyGyro = nil end
+    end
+end)
+
+local clickRageBtn = createModernButton(pageClickRage, '🔫 CLICK RAGE - OFF', 1)
+local ClickRageEnabled = false
+
+clickRageBtn.MouseButton1Click:Connect(function()
+    ClickRageEnabled = not ClickRageEnabled
+    clickRageBtn.Text = '🔫 CLICK RAGE - ' .. (ClickRageEnabled and 'ON' or 'OFF')
+end)
+
+Mouse.Button1Down:Connect(function()
+    if not ClickRageEnabled then return end
+    local target = getClosestEnemyForClickRage()
+    if not target or not target.Character then return end
+    local head = target.Character:FindFirstChild('Head')
+    if not head then return end
+    local cam = workspace.CurrentCamera
+    cam.CFrame = CFrame.new(cam.CFrame.Position, head.Position)
+end)
+
+RunService.RenderStepped:Connect(function()
+    if FlyEnabled and FlyBodyVel and FlyBodyGyro then
+        local cam = workspace.CurrentCamera
+        local moveDir = Vector3.new(0, 0, 0)
+        if UIS:IsKeyDown(Enum.KeyCode.W) then
+            moveDir = moveDir + cam.CFrame.LookVector
+        end
+        if UIS:IsKeyDown(Enum.KeyCode.S) then
+            moveDir = moveDir - cam.CFrame.LookVector
+        end
+        if UIS:IsKeyDown(Enum.KeyCode.A) then
+            moveDir = moveDir - cam.CFrame.RightVector
+        end
+        if UIS:IsKeyDown(Enum.KeyCode.D) then
+            moveDir = moveDir + cam.CFrame.RightVector
+        end
+        if UIS:IsKeyDown(Enum.KeyCode.Space) then
+            moveDir = moveDir + Vector3.new(0, 1, 0)
+        end
+        if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
+            moveDir = moveDir - Vector3.new(0, 1, 0)
+        end
+        if moveDir.Magnitude > 0 then
+            moveDir = moveDir.Unit * FlySpeed
+        end
+        FlyBodyVel.Velocity = moveDir
+        FlyBodyGyro.CFrame = cam.CFrame
+    end
+end)

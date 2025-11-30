@@ -1,6 +1,6 @@
--- Programa: CHEAT EXCLUSIVO KIEFER 4
--- Cor: Verde
--- Efeito: Neon
+-- Programa: LKz PAINEL
+-- Cor: Azul
+-- Efeito: Glow
 -- made by KIEFER & LIPZ
 -- ARSENAL TEAM CHECK: sempre mira só em inimigos.
 
@@ -13,7 +13,7 @@ local LocalPlayer = Players.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 
 local screenGui = Instance.new('ScreenGui')
-screenGui.Name = 'CHEAT EXCLUSIVO KIEFER 4_GUI'
+screenGui.Name = 'LKz PAINEL_GUI'
 screenGui.ResetOnSpawn = false
 screenGui.IgnoreGuiInset = true
 screenGui.Parent = LocalPlayer:WaitForChild('PlayerGui')
@@ -50,7 +50,7 @@ shadow.SliceCenter = Rect.new(23, 23, 277, 277)
 shadow.ZIndex = 1
 shadow.Parent = mainFrame
 
-local corPrincipal = Color3.fromRGB(80, 200, 120)
+local corPrincipal = Color3.fromRGB(80, 120, 220)
 
 local topBar = Instance.new('Frame')
 topBar.Size = UDim2.new(1, 0, 0, 42)
@@ -77,7 +77,7 @@ title.BackgroundTransparency = 1
 title.Position = UDim2.new(0, 10, 0, 4)
 title.Size = UDim2.new(1, -100, 0, 20)
 title.Font = Enum.Font.GothamBold
-title.Text = 'LKz Exclusive'
+title.Text = 'LKz PAINEL'
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextSize = 18
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -159,12 +159,12 @@ UIS.InputBegan:Connect(function(input, gp)
     end
 end)
 
-local neon = Instance.new('UIStroke')
-neon.Color = corPrincipal
-neon.Thickness = 3
-neon.Transparency = 0.1
-neon.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-neon.Parent = mainFrame
+local glow = Instance.new('UIStroke')
+glow.Color = corPrincipal
+glow.Thickness = 2
+glow.Transparency = 0.35
+glow.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+glow.Parent = mainFrame
 
 local sideTabs = Instance.new('Frame')
 sideTabs.Position = UDim2.new(0, 0, 0, 42)
@@ -215,16 +215,19 @@ local function createScrollPage(name)
     sf.Visible = false
     sf.ZIndex = 3
     sf.Parent = contentHolder
+
     local layout = Instance.new('UIListLayout')
     layout.FillDirection = Enum.FillDirection.Vertical
     layout.Padding = UDim.new(0, 6)
     layout.HorizontalAlignment = Enum.HorizontalAlignment.Center
     layout.SortOrder = Enum.SortOrder.LayoutOrder
     layout.Parent = sf
+
     local pad = Instance.new('UIPadding')
     pad.PaddingTop = UDim.new(0, 6)
     pad.PaddingBottom = UDim.new(0, 6)
     pad.Parent = sf
+
     return sf
 end
 
@@ -246,14 +249,17 @@ local function createTab(text, page)
     tab.AutoButtonColor = false
     tab.ZIndex = 3
     tab.Parent = sideTabs
+
     local c = Instance.new('UICorner')
     c.CornerRadius = UDim.new(0, 8)
     c.Parent = tab
+
     local stroke = Instance.new('UIStroke')
     stroke.Color = corPrincipal
     stroke.Thickness = 1.2
     stroke.Transparency = 0.6
     stroke.Parent = tab
+
     local function setActive(state)
         if state then
             tab.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
@@ -263,19 +269,24 @@ local function createTab(text, page)
             tab.TextColor3 = Color3.fromRGB(200, 200, 200)
         end
     end
+
     setActive(page == currentPage)
+
     tab.MouseButton1Click:Connect(function()
         currentPage.Visible = false
         currentPage = page
         currentPage.Visible = true
+
         for _, child in ipairs(sideTabs:GetChildren()) do
             if child:IsA('TextButton') then
                 child.BackgroundColor3 = Color3.fromRGB(22, 22, 30)
                 child.TextColor3 = Color3.fromRGB(200, 200, 200)
             end
         end
+
         setActive(true)
     end)
+
     return tab
 end
 
@@ -296,18 +307,23 @@ local function createModernButton(parentPage, text, order)
     btn.LayoutOrder = order or 0
     btn.ZIndex = 4
     btn.Parent = parentPage
+
     local corner = Instance.new('UICorner')
     corner.CornerRadius = UDim.new(0, 8)
     corner.Parent = btn
+
     local stroke = Instance.new('UIStroke')
     stroke.Color = corPrincipal
     stroke.Thickness = 1.2
     stroke.Transparency = 0.5
     stroke.Parent = btn
+
     local hoverTween = TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Quart), {BackgroundColor3 = Color3.fromRGB(45, 45, 65)})
     local normalTween = TweenService:Create(btn, TweenInfo.new(0.18, Enum.EasingStyle.Quart), {BackgroundColor3 = Color3.fromRGB(32, 32, 45)})
+
     btn.MouseEnter:Connect(function() hoverTween:Play() end)
     btn.MouseLeave:Connect(function() normalTween:Play() end)
+
     return btn
 end
 
@@ -319,24 +335,34 @@ local function isEnemy(plr)
     return plr.Team ~= LocalPlayer.Team
 end
 
+-- VARIÁVEIS DE AIM
 local AimbotActive = false
-local aimbotHotkey = Enum.KeyCode.X
-local AimbotSmooth = 0.12
-local AimbotFOV = 150
+local aimbotHotkey = nil
+local AimbotSmooth = 0.04  -- default legit suave
+local AimbotFOV = 80       -- default legit
 local aimbotMode = 'legit'
+local aimbotKeyMode = 2 -- 1 = TOGGLE, 2 = HOLD
+
 local AimAssistActive = false
-local aimAssistHotkey = Enum.KeyCode.T
+local aimAssistHotkey = nil
 local AimAssistStrength = 0.04
-local AimAssistFOV = 180
+local AimAssistFOV = 90 -- FOV Aim Assist
+local aimAssistKeyMode = 2 -- 1 = TOGGLE, 2 = HOLD
+
 local ESPEnabled = false
 local espBoxes = {}
+
 local SuperJumpEnabled = false
 local defaultJump = 50
+
 local SpeedEnabled = false
 local defaultWalk = 16
+
 local WallHackEnabled = false
 local wallParts = {}
+
 local ClickRageEnabled = false
+
 local FlyEnabled = false
 local FlySpeed = 33
 local FlyBodyVel = nil
@@ -351,6 +377,7 @@ local function isVisible(targetHRP)
     params.FilterType = Enum.RaycastFilterType.Blacklist
     params.FilterDescendantsInstances = {LocalPlayer.Character}
     params.IgnoreWater = true
+
     local result = workspace:Raycast(origin, direction, params)
     if result and result.Instance then
         if not result.Instance:IsDescendantOf(targetHRP.Parent) then
@@ -363,6 +390,7 @@ end
 local function getClosestEnemyWithFOV(fovRadius)
     local closestDist = math.huge
     local target = nil
+
     for _, plr in ipairs(Players:GetPlayers()) do
         if isEnemy(plr) and plr.Character and plr.Character:FindFirstChild('HumanoidRootPart') then
             local hrp = plr.Character.HumanoidRootPart
@@ -380,6 +408,7 @@ local function getClosestEnemyWithFOV(fovRadius)
             end
         end
     end
+
     return target
 end
 
@@ -387,6 +416,7 @@ local function getClosestEnemyForClickRage()
     local biggestFOV = 1000
     local closestDist = math.huge
     local target = nil
+
     for _, plr in ipairs(Players:GetPlayers()) do
         if isEnemy(plr) and plr.Character and plr.Character:FindFirstChild('Head') then
             local headPos = plr.Character.Head.Position
@@ -404,64 +434,181 @@ local function getClosestEnemyForClickRage()
             end
         end
     end
+
     return target
 end
 
-local aimbotBtn = createModernButton(pageCombat, '🎯 AIMBOT [X] - OFF', 1)
-local aimbotHotkeyFrame = Instance.new('Frame')
-aimbotHotkeyFrame.Size = UDim2.new(0, 120, 0, 35)
-aimbotHotkeyFrame.Position = UDim2.new(1, 5, 0, 0)
-aimbotHotkeyFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-aimbotHotkeyFrame.BorderSizePixel = 0
-aimbotHotkeyFrame.Visible = false
-aimbotHotkeyFrame.ZIndex = 10
-aimbotHotkeyFrame.Parent = aimbotBtn
-local hotkeyCorner = Instance.new('UICorner')
-hotkeyCorner.CornerRadius = UDim.new(0, 6)
-hotkeyCorner.Parent = aimbotHotkeyFrame
-local hotkeyLabel = Instance.new('TextLabel')
-hotkeyLabel.Size = UDim2.new(1, -10, 1, 0)
-hotkeyLabel.Position = UDim2.new(0, 5, 0, 0)
-hotkeyLabel.BackgroundTransparency = 1
-hotkeyLabel.Font = Enum.Font.Gotham
-hotkeyLabel.TextSize = 12
-hotkeyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-hotkeyLabel.TextXAlignment = Enum.TextXAlignment.Left
-hotkeyLabel.Text = 'Pressione uma tecla...'
-hotkeyLabel.ZIndex = 11
-hotkeyLabel.Parent = aimbotHotkeyFrame
+-------------------------------
+-- SISTEMA DE HOTKEY SIMPLES --
+-------------------------------
 
-aimbotBtn.MouseButton2Click:Connect(function()
-    aimbotHotkeyFrame.Visible = not aimbotHotkeyFrame.Visible
-end)
+local captureMode = nil      -- "aimbot" ou "assist"
+local choosingKeyStyle = false  -- true = esperando 1/2
 
-local waitingAimbotKey = false
-aimbotHotkeyFrame.MouseEnter:Connect(function() waitingAimbotKey = true end)
-aimbotHotkeyFrame.MouseLeave:Connect(function() waitingAimbotKey = false end)
-aimbotHotkeyFrame.InputBegan:Connect(function(input)
-    if waitingAimbotKey and input.UserInputType == Enum.UserInputType.Keyboard then
-        aimbotHotkey = input.KeyCode
-        hotkeyLabel.Text = 'Tecla: ' .. tostring(aimbotHotkey.Name)
-        aimbotHotkeyFrame.Visible = false
-        aimbotBtn.Text = '🎯 AIMBOT [' .. tostring(aimbotHotkey.Name) .. '] - OFF'
+local function keyName(k)
+    if not k then return "CLIQUE UMA TECLA" end
+    return k.Name
+end
+
+local function getAimbotStatusText()
+    local modeText = (aimbotKeyMode == 1 and "ON/OFF" or "HOLD")
+    local stateText
+    if aimbotKeyMode == 2 then
+        stateText = AimbotActive and "HOLD" or "OFF"
+    else
+        stateText = AimbotActive and "ON" or "OFF"
     end
+    return '🎯 AIMBOT [' .. keyName(aimbotHotkey) .. ' | ' .. modeText .. '] - ' .. stateText
+end
+
+local function getAimAssistStatusText()
+    local modeText = (aimAssistKeyMode == 1 and "ON/OFF" or "HOLD")
+    local stateText
+    if aimAssistKeyMode == 2 then
+        stateText = AimAssistActive and "HOLD" or "OFF"
+    else
+        stateText = AimAssistActive and "ON" or "OFF"
+    end
+    return '🎯 AIM ASSIST [' .. keyName(aimAssistHotkey) .. ' | ' .. modeText .. '] - ' .. stateText
+end
+
+local aimbotBtn = createModernButton(pageCombat, getAimbotStatusText(), 1)
+local aimAssistBtn = createModernButton(pageCombat, getAimAssistStatusText(), 6)
+
+aimbotBtn.MouseButton1Click:Connect(function()
+    captureMode = "aimbot"
+    choosingKeyStyle = true
+    aimbotBtn.Text = '🎯 AIMBOT [1 = ON/OFF | 2 = HOLD]'
 end)
+
+aimAssistBtn.MouseButton1Click:Connect(function()
+    captureMode = "assist"
+    choosingKeyStyle = true
+    aimAssistBtn.Text = '🎯 AIM ASSIST [1 = ON/OFF | 2 = HOLD]'
+end)
+
+local function isKeyUsed(newKey, owner)
+    if not newKey then return false end
+    if owner == "aimbot" and aimAssistHotkey == newKey then
+        return true
+    end
+    if owner == "assist" and aimbotHotkey == newKey then
+        return true
+    end
+    return false
+end
 
 UIS.InputBegan:Connect(function(input, gp)
     if gp then return end
-    if input.KeyCode == aimbotHotkey then
-        AimbotActive = true
-        aimbotBtn.Text = '🎯 AIMBOT [' .. tostring(aimbotHotkey.Name) .. '] - HOLD'
+    if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
+
+    -- escolher 1/2
+    if choosingKeyStyle and captureMode then
+        local kc = input.KeyCode
+        local chose = false
+
+        if kc == Enum.KeyCode.One or kc == Enum.KeyCode.KeypadOne then
+            if captureMode == "aimbot" then
+                aimbotKeyMode = 1
+                aimbotBtn.Text = '🎯 AIMBOT [AGUARDANDO TECLA...]'
+            else
+                aimAssistKeyMode = 1
+                aimAssistBtn.Text = '🎯 AIM ASSIST [AGUARDANDO TECLA...]'
+            end
+            chose = true
+        elseif kc == Enum.KeyCode.Two or kc == Enum.KeyCode.KeypadTwo then
+            if captureMode == "aimbot" then
+                aimbotKeyMode = 2
+                aimbotBtn.Text = '🎯 AIMBOT [AGUARDANDO TECLA...]'
+            else
+                aimAssistKeyMode = 2
+                aimAssistBtn.Text = '🎯 AIM ASSIST [AGUARDANDO TECLA...]'
+            end
+            chose = true
+        end
+
+        if chose then
+            choosingKeyStyle = false
+        else
+            if captureMode == "aimbot" then
+                aimbotBtn.Text = '🎯 AIMBOT [PRESSIONE 1 (ON/OFF) OU 2 (HOLD)]'
+            else
+                aimAssistBtn.Text = '🎯 AIM ASSIST [PRESSIONE 1 (ON/OFF) OU 2 (HOLD)]'
+            end
+        end
+        return
+    end
+
+    -- escolher tecla final
+    if captureMode and not choosingKeyStyle then
+        local newKey = input.KeyCode
+
+        if isKeyUsed(newKey, captureMode) then
+            if captureMode == "aimbot" then
+                aimbotBtn.Text = '🎯 AIMBOT [JÁ EM USO]'
+                task.delay(0.8, function()
+                    aimbotBtn.Text = getAimbotStatusText()
+                end)
+            else
+                aimAssistBtn.Text = '🎯 AIM ASSIST [JÁ EM USO]'
+                task.delay(0.8, function()
+                    aimAssistBtn.Text = getAimAssistStatusText()
+                end)
+            end
+            captureMode = nil
+            return
+        end
+
+        if captureMode == "aimbot" then
+            aimbotHotkey = newKey
+            aimbotBtn.Text = getAimbotStatusText()
+        else
+            aimAssistHotkey = newKey
+            aimAssistBtn.Text = getAimAssistStatusText()
+        end
+
+        captureMode = nil
+        return
+    end
+
+    -- uso normal
+    if aimbotHotkey and input.KeyCode == aimbotHotkey then
+        if aimbotKeyMode == 2 then
+            AimbotActive = true
+        else
+            AimbotActive = not AimbotActive
+        end
+        aimbotBtn.Text = getAimbotStatusText()
+    end
+
+    if aimAssistHotkey and input.KeyCode == aimAssistHotkey then
+        if aimAssistKeyMode == 2 then
+            AimAssistActive = true
+        else
+            AimAssistActive = not AimAssistActive
+        end
+        aimAssistBtn.Text = getAimAssistStatusText()
     end
 end)
 
 UIS.InputEnded:Connect(function(input, gp)
     if gp then return end
-    if input.KeyCode == aimbotHotkey then
+    if input.UserInputType ~= Enum.UserInputType.Keyboard then return end
+
+    if aimbotHotkey and input.KeyCode == aimbotHotkey and aimbotKeyMode == 2 then
         AimbotActive = false
-        aimbotBtn.Text = '🎯 AIMBOT [' .. tostring(aimbotHotkey.Name) .. '] - OFF'
+        aimbotBtn.Text = getAimbotStatusText()
+    end
+
+    if aimAssistHotkey and input.KeyCode == aimAssistHotkey and aimAssistKeyMode == 2 then
+        AimAssistActive = false
+        aimAssistBtn.Text = getAimAssistStatusText()
     end
 end)
+
+----------------
+-- MODOS AIMBOT
+----------------
 
 local rageBtn = createModernButton(pageCombat, '⚡ RAGE', 2)
 local semiRageBtn = createModernButton(pageCombat, '🔥 SEMI-RAGE', 3)
@@ -480,28 +627,28 @@ end
 rageBtn.MouseButton1Click:Connect(function()
     aimbotMode = 'rage'
     AimbotSmooth = 0.95
-    AimbotFOV = 450
+    AimbotFOV = 200
     updateModeButtons()
 end)
 
 semiRageBtn.MouseButton1Click:Connect(function()
     aimbotMode = 'semi'
     AimbotSmooth = 0.5
-    AimbotFOV = 300
+    AimbotFOV = 150
     updateModeButtons()
 end)
 
 smoothBtn.MouseButton1Click:Connect(function()
     aimbotMode = 'smooth'
-    AimbotSmooth = 0.2
-    AimbotFOV = 220
+    AimbotSmooth = 0.08   -- mais suave
+    AimbotFOV = 100
     updateModeButtons()
 end)
 
 legitBtn.MouseButton1Click:Connect(function()
     aimbotMode = 'legit'
-    AimbotSmooth = 0.12
-    AimbotFOV = 150
+    AimbotSmooth = 0.04   -- bem legit
+    AimbotFOV = 80
     updateModeButtons()
 end)
 
@@ -519,62 +666,6 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
-local aimAssistBtn = createModernButton(pageCombat, '🎯 AIM ASSIST [T] - OFF', 6)
-local aimAssistHotkeyFrame = Instance.new('Frame')
-aimAssistHotkeyFrame.Size = UDim2.new(0, 120, 0, 35)
-aimAssistHotkeyFrame.Position = UDim2.new(1, 5, 0, 0)
-aimAssistHotkeyFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-aimAssistHotkeyFrame.BorderSizePixel = 0
-aimAssistHotkeyFrame.Visible = false
-aimAssistHotkeyFrame.ZIndex = 10
-aimAssistHotkeyFrame.Parent = aimAssistBtn
-local aimAssistHotkeyCorner = Instance.new('UICorner')
-aimAssistHotkeyCorner.CornerRadius = UDim.new(0, 6)
-aimAssistHotkeyCorner.Parent = aimAssistHotkeyFrame
-local aimAssistHotkeyLabel = Instance.new('TextLabel')
-aimAssistHotkeyLabel.Size = UDim2.new(1, -10, 1, 0)
-aimAssistHotkeyLabel.Position = UDim2.new(0, 5, 0, 0)
-aimAssistHotkeyLabel.BackgroundTransparency = 1
-aimAssistHotkeyLabel.Font = Enum.Font.Gotham
-aimAssistHotkeyLabel.TextSize = 12
-aimAssistHotkeyLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-aimAssistHotkeyLabel.TextXAlignment = Enum.TextXAlignment.Left
-aimAssistHotkeyLabel.Text = 'Pressione uma tecla...'
-aimAssistHotkeyLabel.ZIndex = 11
-aimAssistHotkeyLabel.Parent = aimAssistHotkeyFrame
-
-aimAssistBtn.MouseButton2Click:Connect(function()
-    aimAssistHotkeyFrame.Visible = not aimAssistHotkeyFrame.Visible
-end)
-
-local waitingAimAssistKey = false
-aimAssistHotkeyFrame.MouseEnter:Connect(function() waitingAimAssistKey = true end)
-aimAssistHotkeyFrame.MouseLeave:Connect(function() waitingAimAssistKey = false end)
-aimAssistHotkeyFrame.InputBegan:Connect(function(input)
-    if waitingAimAssistKey and input.UserInputType == Enum.UserInputType.Keyboard then
-        aimAssistHotkey = input.KeyCode
-        aimAssistHotkeyLabel.Text = 'Tecla: ' .. tostring(aimAssistHotkey.Name)
-        aimAssistHotkeyFrame.Visible = false
-        aimAssistBtn.Text = '🎯 AIM ASSIST [' .. tostring(aimAssistHotkey.Name) .. '] - OFF'
-    end
-end)
-
-UIS.InputBegan:Connect(function(input, gp)
-    if gp then return end
-    if input.KeyCode == aimAssistHotkey then
-        AimAssistActive = true
-        aimAssistBtn.Text = '🎯 AIM ASSIST [' .. tostring(aimAssistHotkey.Name) .. '] - HOLD'
-    end
-end)
-
-UIS.InputEnded:Connect(function(input, gp)
-    if gp then return end
-    if input.KeyCode == aimAssistHotkey then
-        AimAssistActive = false
-        aimAssistBtn.Text = '🎯 AIM ASSIST [' .. tostring(aimAssistHotkey.Name) .. '] - OFF'
-    end
-end)
-
 RunService.RenderStepped:Connect(function()
     if AimAssistActive then
         local target = getClosestEnemyWithFOV(AimAssistFOV)
@@ -586,6 +677,10 @@ RunService.RenderStepped:Connect(function()
         end
     end
 end)
+
+-----------------------
+-- VISUAL / ESP / ETC
+-----------------------
 
 local function clearESP()
     for _, b in ipairs(espBoxes) do
@@ -608,10 +703,10 @@ local function createESPForPlayer(plr)
     end
 end
 
-local espBtn = createModernButton(pageVisual, '👁️ ESP ENEMIES - OFF', 1)
+local espBtn = createModernButton(pageVisual, '👁 ESP ENEMIES - OFF', 1)
 espBtn.MouseButton1Click:Connect(function()
     ESPEnabled = not ESPEnabled
-    espBtn.Text = '👁️ ESP ENEMIES - ' .. (ESPEnabled and 'ON' or 'OFF')
+    espBtn.Text = '👁 ESP ENEMIES - ' .. (ESPEnabled and 'ON' or 'OFF')
     clearESP()
     if ESPEnabled then
         for _, plr in ipairs(Players:GetPlayers()) do
@@ -643,12 +738,14 @@ local wallBtn = createModernButton(pageVisual, '🧱 WALL HACK - OFF', 2)
 wallBtn.MouseButton1Click:Connect(function()
     WallHackEnabled = not WallHackEnabled
     wallBtn.Text = '🧱 WALL HACK - ' .. (WallHackEnabled and 'ON' or 'OFF')
+
     for _, p in ipairs(wallParts) do
         if p.part and p.part.Parent then
             p.part.LocalTransparencyModifier = p.old or 0
         end
     end
     wallParts = {}
+
     if WallHackEnabled then
         for _, part in ipairs(workspace:GetDescendants()) do
             if part:IsA('BasePart') and part.Transparency < 1 then
@@ -700,6 +797,10 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
+----------------
+-- MISC: JUMP, SPEED, FLY
+----------------
+
 local superJumpBtn = createModernButton(pageMisc, '🚀 SUPER JUMP - OFF', 1)
 superJumpBtn.MouseButton1Click:Connect(function()
     SuperJumpEnabled = not SuperJumpEnabled
@@ -728,19 +829,22 @@ speedBtn.MouseButton1Click:Connect(function()
     end
 end)
 
-local flyBtn = createModernButton(pageMisc, '✈️ FLY - OFF', 3)
+local flyBtn = createModernButton(pageMisc, '✈ FLY - OFF', 3)
 flyBtn.MouseButton1Click:Connect(function()
     FlyEnabled = not FlyEnabled
-    flyBtn.Text = '✈️ FLY - ' .. (FlyEnabled and 'ON' or 'OFF')
+    flyBtn.Text = '✈ FLY - ' .. (FlyEnabled and 'ON' or 'OFF')
+
     local char = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
     local hum = char:WaitForChild('Humanoid')
     local root = char:WaitForChild('HumanoidRootPart')
+
     if FlyEnabled then
         hum.PlatformStand = true
         FlyBodyVel = Instance.new('BodyVelocity')
         FlyBodyVel.MaxForce = Vector3.new(1e5, 1e5, 1e5)
         FlyBodyVel.Velocity = Vector3.new(0, 0, 0)
         FlyBodyVel.Parent = root
+
         FlyBodyGyro = Instance.new('BodyGyro')
         FlyBodyGyro.MaxTorque = Vector3.new(1e5, 1e5, 1e5)
         FlyBodyGyro.P = 1e4
@@ -753,8 +857,12 @@ flyBtn.MouseButton1Click:Connect(function()
     end
 end)
 
+----------------
+-- CLICK RAGE
+----------------
+
 local clickRageBtn = createModernButton(pageClickRage, '🔫 CLICK RAGE - OFF', 1)
-local ClickRageEnabled = false
+ClickRageEnabled = false
 
 clickRageBtn.MouseButton1Click:Connect(function()
     ClickRageEnabled = not ClickRageEnabled
@@ -775,6 +883,7 @@ RunService.RenderStepped:Connect(function()
     if FlyEnabled and FlyBodyVel and FlyBodyGyro then
         local cam = workspace.CurrentCamera
         local moveDir = Vector3.new(0, 0, 0)
+
         if UIS:IsKeyDown(Enum.KeyCode.W) then
             moveDir = moveDir + cam.CFrame.LookVector
         end
@@ -793,10 +902,17 @@ RunService.RenderStepped:Connect(function()
         if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then
             moveDir = moveDir - Vector3.new(0, 1, 0)
         end
+
         if moveDir.Magnitude > 0 then
             moveDir = moveDir.Unit * FlySpeed
         end
+
         FlyBodyVel.Velocity = moveDir
         FlyBodyGyro.CFrame = cam.CFrame
     end
 end)
+
+
+
+
+esse ta com a suavidade dos aimbots smoth e legit corrigidas, e o fov tambem

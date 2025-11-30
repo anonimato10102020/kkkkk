@@ -911,6 +911,3 @@ RunService.RenderStepped:Connect(function()
         FlyBodyGyro.CFrame = cam.CFrame
     end
 end)
-
-
-
